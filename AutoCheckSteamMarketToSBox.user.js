@@ -7,7 +7,7 @@
 // @license MIT
 // @copyright Copyright (c) 2013 by Adam Hellberg
 // @include http://steamcommunity.com/market/listings/*
-// @version 1.0
+// @version 1.1
 // @updateURL https://raw.github.com/Sharparam/UserScripts/master/AutoCheckSteamMarketToSBox.user.js
 // ==/UserScript==
 
