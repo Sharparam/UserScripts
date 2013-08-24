@@ -2,10 +2,12 @@
 // @name        PDHO Flair Linker
 // @namespace   http://sharparam.com/
 // @description Finds Steam flairs and makes them link to Steam profiles
+// @downloadURL https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
+// @updateURL https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1
+// @version     1.0.0
 // @run-at      document-end
 // ==/UserScript==
 
@@ -15,7 +17,7 @@ var flairs = document.querySelectorAll('span.flair');
 //var steam_re = /steam: (.*)/i
 
 // Below is experimental regex that should catch more flairs
-var steam_re = /(?:(?:https?:\/\/)?www\.)?steam(?:community\.com\/?(?:(id|profile)\/?)?)?[\/:\s]*([\w\d ]+)/i
+var steam_re = /(?:(?:https?:\/\/)?www\.)?steam(?:community\.com\/?(?:(id|profile)\/?)?)?[\/:\s\|]*([\w\d]+)/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
