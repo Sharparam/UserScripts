@@ -3,11 +3,11 @@
 // @namespace   http://sharparam.com/
 // @description Finds Steam flairs on /r/PaydayTheHeistOnline and makes them link to Steam profiles
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
-// @updateURL https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
+// @updateURL   https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.0.0
+// @version     1.0.1
 // @run-at      document-end
 // ==/UserScript==
 
