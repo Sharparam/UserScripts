@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.0
+// @version     1.1.1
 // @run-at      document-end
 // ==/UserScript==
 
@@ -79,6 +79,15 @@ for (var i = 0; i < flairs.length; i++) {
             a.appendChild(a_text);
             set_text(span, '');
             span.appendChild(a);
+        },
+        onerror: function(response) {
+            console.error('Failed to load ' + url);
+        },
+        onabort: function(response) {
+            console.error('Request aborted: ' + url);
+        },
+        ontimeout: function(response) {
+            console.error('Request timed out: ' + url);
         }
     });
 }
