@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.22
+// @version     1.1.23
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -86,7 +86,7 @@ for (var i = 0; i < flairs.length; i++) {
             var a = document.createElement('a');
             a.href = validProfile ?
                 response.context.profile_url :
-                ('http://steamcommunity.com/actions/Search?K=' + response.context.encoded_name);
+                ('http://steamcommunity.com/actions/SearchFriends?K=' + response.context.encoded_name);
             a.className += 'steam-profile-link';
             var a_text = document.createTextNode(response.context.flair_text);
             a.appendChild(a_text);
