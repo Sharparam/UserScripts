@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.4
+// @version     1.1.5
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -38,6 +38,8 @@
 
 var flairs = document.querySelectorAll('span.flair');
 
+console.info('flairs.length == ' + flairs.length);
+
 // This regex will only catch flairs in the syntax of "Steam: <name>"
 //var steam_re = /steam: (.*)/i
 
@@ -55,7 +57,9 @@ function set_text(e, t) {
         e.textContent = t;
 }
 
+console.info('running for loop');
 for (var i = 0; i < flairs.length; i++) {
+    console.info('i == ' + i);
     var span = flairs[i];
     var text = get_text(span);
     var match = steam_re.exec(text);
