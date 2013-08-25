@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.15
+// @version     1.1.16
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -70,7 +70,7 @@ for (var i = 0; i < flairs.length; i++) {
         url: url,
         accept: 'text/xml',
         context: {
-            flair_id: i,
+            flair_index: i,
             flair_text: text,
             matched_name: name,
             query_url: url
