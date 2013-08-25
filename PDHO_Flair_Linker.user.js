@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.9
+// @version     1.1.10
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -72,21 +72,9 @@ for (var i = 0; i < flairs.length; i++) {
         accept: 'text/xml',
         onreadystatechange: function(response) {
             //console.info('ready state: ' + response.readyState);
-            if (response.readyState != 4 || !response.responseText)
+            if (response.readyState != 4)
                 return;
-            var doc = new DOMParser().parseFromString(response.responseText, 'text/xml');
-            var validProfile = doc && doc.documentElement && doc.documentElement.nodeName == 'profile';
-            var a = document.createElement('a');
-            a.href = validProfile ? url : 'http://steamcommunity.com/actions/Search?K=' + name;
-            a.className += 'steam-profile-link';
-            var a_text = document.createTextNode(text);
-            a.appendChild(a_text);
-            set_text(span, '');
-            span.appendChild(a);
-        },
-        onload: function(response) {
-            if (!response.responseText)
-                return;
+            console.info('response: ' + response.responseText);
             var doc = new DOMParser().parseFromString(response.responseText, 'text/xml');
             var validProfile = doc && doc.documentElement && doc.documentElement.nodeName == 'profile';
             var a = document.createElement('a');
