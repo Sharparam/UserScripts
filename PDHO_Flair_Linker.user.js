@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.20
+// @version     1.1.21
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -64,7 +64,7 @@ for (var i = 0; i < flairs.length; i++) {
     if (match == null || match.length < 3)
         continue;
     var type = match[1] || 'id';
-    var name = match[2].replace(/ /g, '+');
+    var name = encodeURIComponent(match[2]);
     var url = 'http://steamcommunity.com/' + type + '/' + name;
     var xml_url = url + '?xml=1';
     GM_xmlhttpRequest({
@@ -74,7 +74,7 @@ for (var i = 0; i < flairs.length; i++) {
         context: {
             flair_index: i,
             flair_text: text,
-            matched_name: name,
+            encoded_name: name,
             profile_url: url,
             query_url: xml_url
         },
@@ -86,7 +86,7 @@ for (var i = 0; i < flairs.length; i++) {
             var a = document.createElement('a');
             a.href = validProfile ?
                 response.context.profile_url :
-                ('http://steamcommunity.com/actions/Search?K=' + response.context.matched_name);
+                ('http://steamcommunity.com/actions/Search?K=' + response.context.encoded_name);
             a.className += 'steam-profile-link';
             var a_text = document.createTextNode(response.context.flair_text);
             a.appendChild(a_text);
