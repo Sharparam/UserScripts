@@ -7,6 +7,6 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.2
+// @version     1.1.3
 // @run-at      document-end
 // ==/UserScript==
