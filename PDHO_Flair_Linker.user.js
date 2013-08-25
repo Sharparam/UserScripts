@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.5
+// @version     1.1.6
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -67,7 +67,7 @@ for (var i = 0; i < flairs.length; i++) {
         continue;
     var type = match[1] || 'id';
     var name = match[2].replace(/ /g, '+');
-    var url = 'http://steamcommunity.com/' + type + '/' + name + '?xml=1');
+    var url = 'http://steamcommunity.com/' + type + '/' + name + '?xml=1';
     console.info('Requesting: ' + url);
     GM_xmlhttpRequest({
         method: 'GET',
