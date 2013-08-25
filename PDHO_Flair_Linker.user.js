@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.7
+// @version     1.1.8
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -71,6 +71,7 @@ for (var i = 0; i < flairs.length; i++) {
         url: url,
         accept: 'text/xml',
         onreadystatechange: function(response) {
+            console.info('ready state: ' + response.readyState);
             if (response.readyState != response.DONE || !response.responseText)
                 return;
             var doc = new DOMParser().parseFromString(response.responseText, 'text/xml');
