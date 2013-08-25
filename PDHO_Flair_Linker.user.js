@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.10
+// @version     1.1.11
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -55,7 +55,7 @@ function set_text(e, t) {
         e.textContent = t;
 }
 
-console.info('running for loop');
+var parser = new DOMParser();
 for (var i = 0; i < flairs.length; i++) {
     var span = flairs[i];
     var text = get_text(span);
@@ -74,9 +74,9 @@ for (var i = 0; i < flairs.length; i++) {
             //console.info('ready state: ' + response.readyState);
             if (response.readyState != 4)
                 return;
-            console.info('response: ' + response.responseText);
-            var doc = new DOMParser().parseFromString(response.responseText, 'text/xml');
-            var validProfile = doc && doc.documentElement && doc.documentElement.nodeName == 'profile';
+            var doc = parser.parseFromString(response.responseText, 'text/xml');
+            console.info('nodeName: ' + doc.documentElement.nodeName);
+            var validProfile = doc.documentElement.nodeName == 'profile';
             var a = document.createElement('a');
             a.href = validProfile ? url : 'http://steamcommunity.com/actions/Search?K=' + name;
             a.className += 'steam-profile-link';
