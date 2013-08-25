@@ -68,7 +68,7 @@ for (var i = 0; i < flairs.length; i++) {
     var xml_url = url + '?xml=1';
     GM_xmlhttpRequest({
         method: 'GET',
-        url: url,
+        url: xml_url,
         accept: 'text/xml',
         context: {
             flair_index: i,
