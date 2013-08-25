@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.11
+// @version     1.1.12
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -75,24 +75,15 @@ for (var i = 0; i < flairs.length; i++) {
             if (response.readyState != 4)
                 return;
             var doc = parser.parseFromString(response.responseText, 'text/xml');
-            console.info('nodeName: ' + doc.documentElement.nodeName);
             var validProfile = doc.documentElement.nodeName == 'profile';
+            console.info((validProfile ? 'VALID: ' : 'INVALID: ') + url);
             var a = document.createElement('a');
-            a.href = validProfile ? url : 'http://steamcommunity.com/actions/Search?K=' + name;
+            a.href = validProfile ? url : ('http://steamcommunity.com/actions/Search?K=' + name);
             a.className += 'steam-profile-link';
             var a_text = document.createTextNode(text);
             a.appendChild(a_text);
             set_text(span, '');
             span.appendChild(a);
-        },
-        onerror: function(response) {
-            console.error('Failed to load ' + url);
-        },
-        onabort: function(response) {
-            console.error('Request aborted: ' + url);
-        },
-        ontimeout: function(response) {
-            console.error('Request timed out: ' + url);
         }
     });
 }
