@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.0.1
+// @version     1.0.2
 // @run-at      document-end
 // ==/UserScript==
 
@@ -41,7 +41,7 @@ var flairs = document.querySelectorAll('span.flair');
 //var steam_re = /steam: (.*)/i
 
 // Below is experimental regex that should catch more flairs
-var steam_re = /(?:(?:https?:\/\/)?www\.)?steam(?:community\.com\/?(?:(id|profile)\/?)?)?[\/:\s\|]*([\w\d]+)/i
+var steam_re = /(?:(?:https?:\/\/)?www\.)?steam(?:community\.com\/?(?:(id|profiles)\/?)?)?[\/:\s\|]*([\w\d]+)/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
