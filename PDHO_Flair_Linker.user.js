@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.13
+// @version     1.1.14
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -56,6 +56,7 @@ function set_text(e, t) {
 }
 
 var parser = new DOMParser();
+
 for (var i = 0; i < flairs.length; i++) {
     var text = get_text(flairs[i]);
     var match = steam_re.exec(text);
@@ -69,21 +70,28 @@ for (var i = 0; i < flairs.length; i++) {
         method: 'GET',
         url: url,
         accept: 'text/xml',
-        context: i,
+        context: {
+            flair_id: i,
+            flair_text: text,
+            matched_name: name,
+            query_url: url
+        },
         onreadystatechange: function(response) {
             //console.info('ready state: ' + response.readyState);
             if (response.readyState != 4)
                 return;
             var doc = parser.parseFromString(response.responseText, 'text/xml');
             var validProfile = doc.documentElement.nodeName == 'profile';
-            console.info((validProfile ? 'VALID: ' : 'INVALID: ') + url);
+            console.info((validProfile ? 'VALID: ' : 'INVALID: ') + response.context.query_url);
             var a = document.createElement('a');
-            a.href = validProfile ? url : ('http://steamcommunity.com/actions/Search?K=' + name);
+            a.href = validProfile ?
+                response.context.query_url :
+                ('http://steamcommunity.com/actions/Search?K=' + response.context.matched_name);
             a.className += 'steam-profile-link';
-            var a_text = document.createTextNode(text);
+            var a_text = document.createTextNode(response.context.flair_text);
             a.appendChild(a_text);
-            set_text(flairs[response.context], '');
-            flairs[response.context].appendChild(a);
+            set_text(flairs[response.context.flair_index], '');
+            flairs[response.context.flair_index].appendChild(a);
         }
     });
 }
