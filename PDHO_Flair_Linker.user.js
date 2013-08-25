@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.14
+// @version     1.1.15
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -65,7 +65,6 @@ for (var i = 0; i < flairs.length; i++) {
     var type = match[1] || 'id';
     var name = match[2].replace(/ /g, '+');
     var url = 'http://steamcommunity.com/' + type + '/' + name + '?xml=1';
-    console.info('Requesting: ' + url);
     GM_xmlhttpRequest({
         method: 'GET',
         url: url,
@@ -82,7 +81,6 @@ for (var i = 0; i < flairs.length; i++) {
                 return;
             var doc = parser.parseFromString(response.responseText, 'text/xml');
             var validProfile = doc.documentElement.nodeName == 'profile';
-            console.info((validProfile ? 'VALID: ' : 'INVALID: ') + response.context.query_url);
             var a = document.createElement('a');
             a.href = validProfile ?
                 response.context.query_url :
@@ -90,6 +88,7 @@ for (var i = 0; i < flairs.length; i++) {
             a.className += 'steam-profile-link';
             var a_text = document.createTextNode(response.context.flair_text);
             a.appendChild(a_text);
+            console.info('updating flair index: ' + response.context.flair_index);
             set_text(flairs[response.context.flair_index], '');
             flairs[response.context.flair_index].appendChild(a);
         }
