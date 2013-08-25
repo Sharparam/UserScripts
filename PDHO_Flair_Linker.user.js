@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.6
+// @version     1.1.7
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -38,8 +38,6 @@
 
 var flairs = document.querySelectorAll('span.flair');
 
-console.info('flairs.length == ' + flairs.length);
-
 // This regex will only catch flairs in the syntax of "Steam: <name>"
 //var steam_re = /steam: (.*)/i
 
@@ -59,7 +57,6 @@ function set_text(e, t) {
 
 console.info('running for loop');
 for (var i = 0; i < flairs.length; i++) {
-    console.info('i == ' + i);
     var span = flairs[i];
     var text = get_text(span);
     var match = steam_re.exec(text);
@@ -73,6 +70,19 @@ for (var i = 0; i < flairs.length; i++) {
         method: 'GET',
         url: url,
         accept: 'text/xml',
+        onreadystatechange: function(response) {
+            if (response.readyState != response.DONE || !response.responseText)
+                return;
+            var doc = new DOMParser().parseFromString(response.responseText, 'text/xml');
+            var validProfile = doc && doc.documentElement && doc.documentElement.nodeName == 'profile';
+            var a = document.createElement('a');
+            a.href = validProfile ? url : 'http://steamcommunity.com/actions/Search?K=' + name;
+            a.className += 'steam-profile-link';
+            var a_text = document.createTextNode(text);
+            a.appendChild(a_text);
+            set_text(span, '');
+            span.appendChild(a);
+        },
         onload: function(response) {
             if (!response.responseText)
                 return;
