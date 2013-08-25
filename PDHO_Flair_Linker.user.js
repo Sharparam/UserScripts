@@ -43,7 +43,7 @@ var flairs = document.querySelectorAll('span.flair');
 
 // Below is experimental regex that should catch more flairs
 // ([\w\s\-\.,:;|~#"'%&\/\\\^()[\]{}@!]|[^\x00-\x80])+ // Old name match
-var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,}?)(?: [\/:|\-]\ ?(?:\/?ghost|tech|enforcer|mm)+)?/i
+var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,})/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
