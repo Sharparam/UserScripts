@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name        PDHO Flair Linker
 // @namespace   http://sharparam.com/
-// @description Finds Steam flairs on /r/PaydayTheHeistOnline and makes them link to Steam profiles
+// @description Finds flairs on /r/PaydayTheHeistOnline and makes them link to profiles
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.user.js
 // @updateURL   https://github.com/Sharparam/UserScripts/raw/master/PDHO_Flair_Linker.meta.js
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.1.31
+// @version     1.2.0
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -38,11 +38,10 @@
 
 var flairs = document.querySelectorAll('span.flair');
 
-// This regex will only catch flairs in the syntax of "Steam: <name>"
-//var steam_re = /steam: (.*)/i
-
 // Below is experimental regex that should catch more flairs
-var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,}?)(?:[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
+//var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,}?)(?:[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
+
+var profile_regex = /(steam|pc|ps[n3]?|x?360|xbox(?:360)?)[\s:\-|_]*(.+?)(?: ?[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
@@ -55,36 +54,74 @@ function set_text(e, t) {
         e.textContent = t;
 }
 
+var platforms = {
+    steam: 1,
+    xbox: 2,
+    psn: 3
+};
+
 var parser = new DOMParser();
 
 for (var i = 0; i < flairs.length; i++) {
     var text = get_text(flairs[i]);
-    var match = steam_re.exec(text);
+    var match = profile_regex.exec(text);
     if (match == null || match.length < 3)
         continue;
-    var type = match[1] || 'id';
+    var platform = match[1];
     var name = encodeURIComponent(match[2]);
-    var url = 'http://steamcommunity.com/' + type + '/' + name;
-    (function(flair_index, flair_text, encoded_name, profile_url) {
+    var url = null;
+    var search_url = null;
+    var poll_url = null;
+    var accept = null;
+    var profile_class = '';
+    var search_class = '';
+
+    if (platform.match(/steam|pc/i)) {
+        platform = platforms.steam;
+        url = 'http://steamcommunity.com/' + type + '/' + name;
+        search_url = 'http://steamcommunity.com/actions/SearchFriends?K=' + name;
+        poll_url = url + '?xml=1';
+        accept = 'text/xml';
+        profile_class = 'steam-profile-link';
+        search_class = 'steam-profile-search-link';
+    } else if (platform.match(/^[x3]/i)) {
+        platform = platforms.xbox;
+        url = 'https://live.xbox.com/Profile?gamertag=' + name;
+        search_url = url;
+        poll_url = 'https://www.xboxleaders.com/api/2.0/profile.json?gamertag=' + name;
+        accept = 'text/json';
+        profile_class = 'xbox-profile-link';
+        search_class = 'xbox-profile-search-link';
+    } else
+        continue; // PSN not implemented
+
+    (function(flair_index, flair_text, encoded_name, profile_url, search_url, platform, p_c, s_c) {
         GM_xmlhttpRequest({
             method: 'GET',
-            url: url + '?xml=1',
-            accept: 'text/xml',
+            url: poll_url,
+            accept: accept,
             onreadystatechange: function(response) {
                 if (response.readyState != 4)
                     return;
-                var doc = parser.parseFromString(response.responseText, 'text/xml');
-                var validProfile = doc.documentElement.nodeName == 'profile';
+                
+                var validProfile = false;
+
+                if (platform == platforms.steam) {
+                    var doc = parser.parseFromString(response.responseText, 'text/xml');
+                    var validProfile = doc.documentElement.nodeName == 'profile';
+                } else if (platform == platforms.xbox) {
+                    var data = JSON.parse(response.responseText);
+                    var validProfile = data.status == 'success';
+                }
+
                 var a = document.createElement('a');
-                a.href = validProfile ?
-                    profile_url :
-                    ('http://steamcommunity.com/actions/SearchFriends?K=' + encoded_name);
-                a.className += (validProfile ? 'steam-profile-link' : 'steam-profile-search-link');
+                a.href = validProfile ? profile_url : search_url;
+                a.className += (validProfile ? p_c : s_c);
                 var a_text = document.createTextNode(flair_text);
                 a.appendChild(a_text);
                 set_text(flairs[flair_index], '');
                 flairs[flair_index].appendChild(a);
             }
         });
-    })(i, text, name, url);
+    })(i, text, name, url, search_url, platform, profile_class, search_class);
 }
