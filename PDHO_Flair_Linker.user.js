@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.2.1
+// @version     1.2.2
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -41,7 +41,7 @@ var flairs = document.querySelectorAll('span.flair');
 // Below is experimental regex that should catch more flairs
 //var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,}?)(?:[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
 
-var profile_regex = /(steam(?: id)?|pc|ps[n3]?|x?360|xbox(?:360)?)[\s:\-|_]*(.+?)(?: ?[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
+var profile_regex = /(steam(?: id)?|pc|ps[n3]?|x?360|xbox(?:360)?|gt|gamertag)[\s:\-|_]*(.+?)(?: ?[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
@@ -84,7 +84,7 @@ for (var i = 0; i < flairs.length; i++) {
         accept = 'text/xml';
         profile_class = 'steam-profile-link';
         search_class = 'steam-profile-search-link';
-    } else if (platform.match(/^[x3]/i)) {
+    } else if (platform.match(/^[x3g]/i)) {
         platform = platforms.xbox;
         url = 'https://live.xbox.com/Profile?gamertag=' + name;
         search_url = url;
