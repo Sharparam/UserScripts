@@ -42,8 +42,7 @@ var flairs = document.querySelectorAll('span.flair');
 //var steam_re = /steam: (.*)/i
 
 // Below is experimental regex that should catch more flairs
-// ([\w\s\-\.,:;|~#"'%&\/\\\^()[\]{}@!]|[^\x00-\x80])+ // Old name match
-var steam_re = /(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,})/i
+var steam_re = /^(?:(?:https?:\/\/)?www\.)?(?:steam|pc)(?:community\.com\/?(?:(id|profiles)\/?)?|[\s\-_]*id)?[\/:\s\|]*(.{2,}?)(?:[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm))+[\[)]?)?$/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
@@ -81,17 +80,18 @@ for (var i = 0; i < flairs.length; i++) {
         onreadystatechange: function(response) {
             if (response.readyState != 4)
                 return;
+            var context = response.context || this.context || context;
             var doc = parser.parseFromString(response.responseText, 'text/xml');
             var validProfile = doc.documentElement.nodeName == 'profile';
             var a = document.createElement('a');
             a.href = validProfile ?
-                response.context.profile_url :
-                ('http://steamcommunity.com/actions/SearchFriends?K=' + response.context.encoded_name);
+                context.profile_url :
+                ('http://steamcommunity.com/actions/SearchFriends?K=' + context.encoded_name);
             a.className += (validProfile ? 'steam-profile-link' : 'steam-profile-search-link');
-            var a_text = document.createTextNode(response.context.flair_text);
+            var a_text = document.createTextNode(context.flair_text);
             a.appendChild(a_text);
-            set_text(flairs[response.context.flair_index], '');
-            flairs[response.context.flair_index].appendChild(a);
+            set_text(flairs[context.flair_index], '');
+            flairs[context.flair_index].appendChild(a);
         }
     });
 }
