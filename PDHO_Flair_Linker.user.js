@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.2.3
+// @version     1.3.0
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -54,6 +54,16 @@ function set_text(e, t) {
         e.textContent = t;
 }
 
+function flair_to_link(flair_index, text, url, c) {
+    var a = document.createElement('a');
+    a.href = url;
+    a.className += c;
+    var a_text = document.createTextNode(text);
+    a.appendChild(a_text);
+    set_text(flairs[flair_index], '');
+    flairs[flair_index].appendChild(a);
+}
+
 var platforms = {
     steam: 1,
     xbox: 2,
@@ -73,8 +83,8 @@ for (var i = 0; i < flairs.length; i++) {
     var search_url = null;
     var poll_url = null;
     var accept = null;
-    var profile_class = '';
-    var search_class = '';
+    var profile_class = null;
+    var search_class = null;
 
     if (platform.match(/^s|^pc|^w|^h/i)) {
         platform = platforms.steam;
@@ -92,36 +102,38 @@ for (var i = 0; i < flairs.length; i++) {
         accept = 'text/json';
         profile_class = 'xbox-profile-link';
         search_class = 'xbox-profile-search-link';
+    } else if (platform.match(/^p/i)) {
+        platform = platforms.psn;
+        url = 'http://psnprofiles.com/' + name;
+        search_url = url;
+        profile_class = 'psn-profile-link';
     } else
-        continue; // PSN not implemented
+        continue; // Unknown platform
 
-    (function(flair_index, flair_text, encoded_name, profile_url, search_url, platform, p_c, s_c) {
-        GM_xmlhttpRequest({
-            method: 'GET',
-            url: poll_url,
-            accept: accept,
-            onreadystatechange: function(response) {
-                if (response.readyState != 4)
-                    return;
+    if (poll_url === null) // Can't verify profile, link directly
+        flair_to_link(i, text, url, profile_class);
+    else
+        (function(flair_index, flair_text, profile_url, search_url, platform, p_c, s_c) {
+            GM_xmlhttpRequest({
+                method: 'GET',
+                url: poll_url,
+                accept: accept,
+                onreadystatechange: function(response) {
+                    if (response.readyState != 4)
+                        return;
 
-                var validProfile = false;
+                    var validProfile = false;
 
-                if (platform == platforms.steam) {
-                    var doc = parser.parseFromString(response.responseText, 'text/xml');
-                    var validProfile = doc.documentElement.nodeName == 'profile';
-                } else if (platform == platforms.xbox) {
-                    var data = JSON.parse(response.responseText);
-                    var validProfile = data.status == 'success';
+                    if (platform == platforms.steam) {
+                        var doc = parser.parseFromString(response.responseText, 'text/xml');
+                        var validProfile = doc.documentElement.nodeName == 'profile';
+                    } else if (platform == platforms.xbox) {
+                        var data = JSON.parse(response.responseText);
+                        var validProfile = data.status == 'success';
+                    }
+
+                    flair_to_link(flair_index, flair_text, validProfile ? profile_url : search_url, validProfile ? p_c : s_c);
                 }
-
-                var a = document.createElement('a');
-                a.href = validProfile ? profile_url : search_url;
-                a.className += (validProfile ? p_c : s_c);
-                var a_text = document.createTextNode(flair_text);
-                a.appendChild(a_text);
-                set_text(flairs[flair_index], '');
-                flairs[flair_index].appendChild(a);
-            }
-        });
-    })(i, text, name, url, search_url, platform, profile_class, search_class);
+            });
+        })(i, text, url, search_url, platform, profile_class, search_class);
 }
