@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.2.2
+// @version     1.2.3
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
