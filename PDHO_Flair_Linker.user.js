@@ -7,7 +7,7 @@
 // @include     http://www.reddit.com/r/paydaytheheistonline*
 // @include     http://reddit.com/r/paydaytheheistonline*
 // @include     https://pay.reddit.com/r/paydaytheheistonline*
-// @version     1.4.0
+// @version     1.4.1
 // @grant       GM_xmlhttpRequest
 // @run-at      document-end
 // ==/UserScript==
@@ -43,7 +43,7 @@ var flairs = document.querySelectorAll('span.flair');
 
 var profile_regex = /((?:(?:http:\/\/)?www\.)?steam(?:community\.com\/)?(?: ?id)?|pc|ps[n3]?|x?360|xbox(?:360)?|gt|gamertag)[\s:\-|_\/\\]*(.+?)(?: ?[\/|:\-\[(] ?(?:\/?(?:ghost|enforcer|tech|mm|master))+[\[)]?)?$/i
 
-var steam_regex = /steamcommunity\.com\/(id|profiles)/i
+var steam_profiles_regex = /steamcommunity\.com\/profiles\/(\d+)/i
 
 function get_text(e) {
     return e.innerText || e.textContent;
@@ -90,10 +90,12 @@ for (var i = 0; i < flairs.length; i++) {
 
     if (platform.match(/^s|^pc|^w|^h/i)) {
         platform = platforms.steam;
-        var type_match = steam_regex.exec(text);
+        var profiles_match = steam_profiles_regex.exec(text);
         var type = 'id';
-        if (type_match != null && type_match.length >= 2)
-            type = type_match[1];
+        if (profiles_match != null && profiles_match.length >= 2) {
+            type = 'profiles';
+            name = profiles_match[1];
+        }
         url = 'http://steamcommunity.com/' + type + '/' + name;
         search_url = 'http://steamcommunity.com/actions/SearchFriends?K=' + name;
         poll_url = url + '?xml=1';
