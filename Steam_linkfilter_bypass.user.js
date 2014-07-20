@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name Steam linkfilter bypass
-// @namespace steamlinkfilter
+// @namespace http://sharparam.com/
 // @description Bypasses the Steam linkfilter
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/Steam_linkfilter_bypass.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/Steam_linkfilter_bypass.meta.js
