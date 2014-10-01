@@ -5,7 +5,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.meta.js
 // @include /^https?://(www\.)?facebook.com(/.*)?$/
-// @version 1.0.0
+// @version 1.1.0
 // @grant none
 // @run-at document-end
 // ==/UserScript==

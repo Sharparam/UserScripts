@@ -5,7 +5,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.meta.js
 // @include /^https?://(www\.)?facebook.com(/.*)?$/
-// @version 1.0.0
+// @version 1.1.0
 // @grant none
 // @run-at document-end
 // ==/UserScript==
@@ -34,10 +34,14 @@ function cleanComments() {
     }
 }
 
-// Dirty workaround until something better can be designed
-function cleanCaller() {
+window.onload = function() {
     cleanComments();
-    setTimeout(cleanCaller, 1000);
-}
-
-window.onload = function() { cleanCaller(); };
+    // Create a button the user can use to clean the comments
+    var html = '<button style="position: fixed; bottom: 10px; left: 10px;">Clean comments</button>';
+    var frag = document.createDocumentFragment();
+    var temp = document.createElement('div');
+    temp.innerHTML = html;
+    var btn = temp.firstChild;
+    btn.onclick = function() { cleanComments(); };
+    document.body.insert(btn);
+};
