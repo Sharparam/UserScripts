@@ -5,7 +5,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.meta.js
 // @include /^https?://(www\.)?facebook.com(/.*)?$/
-// @version 1.1.0
+// @version 1.1.1
 // @grant none
 // @run-at document-end
 // ==/UserScript==
@@ -43,5 +43,5 @@ window.onload = function() {
     temp.innerHTML = html;
     var btn = temp.firstChild;
     btn.onclick = function() { cleanComments(); };
-    document.body.insert(btn);
+    document.body.appendChild(btn);
 };
