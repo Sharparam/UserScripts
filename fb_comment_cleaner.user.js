@@ -9,7 +9,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/fb_comment_cleaner.meta.js
 // @include /^https?://(www\.)?facebook.com(/.*)?$/
-// @version 1.1.1
+// @version 1.2.0
 // @grant none
 // @run-at document-end
 // ==/UserScript==
@@ -29,7 +29,7 @@ function cleanComments() {
             var cls = element.className;
             var text = element.textContent ? element.textContent.trim() : (element.innerText ? element.innerText.trim() : null);
             
-            if (text !== null && text != '' && name !== 'A' && cls !== 'profileLink')
+            if (name !== 'A' && cls !== 'profileLink')
                 isValid = true;
         }
         
