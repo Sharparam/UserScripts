@@ -5,7 +5,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.meta.js
 // @include https://steamcommunity.com/chat/*
-// @version 1.0.2
+// @version 1.0.3
 // @grant none
 // @run-at document-end
 // ==/UserScript==
@@ -14,7 +14,6 @@ var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
         Array.prototype.forEach.call(mutation.addedNodes, function(node) {
             if (node.className == 'chat_dialog') {
-                observer.disconnect();
                 observer.observe(node.querySelector('.chat_dialog_content_inner'), {
                     childList: true
                 });
