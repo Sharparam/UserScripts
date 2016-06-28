@@ -5,7 +5,7 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.meta.js
 // @include https://steamcommunity.com/chat/*
-// @version 1.0.0
+// @version 1.0.1
 // @grant none
 // @run-at document-end
 // ==/UserScript==
