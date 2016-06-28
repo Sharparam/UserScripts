@@ -10,14 +10,38 @@
 // @run-at document-end
 // ==/UserScript==
 
-var observer = new MutationObserver(function (mutations) {
+var registered = false;
+
+function registerObserver() {
+    if (registered)
+        return;
+
+    var observer = new MutationObserver(function (mutations) {
+        mutations.forEach(function (mutation) {
+            Array.prototype.forEach.call(mutation.addedNodes, function(node) {
+                node.scrollIntoView(true);
+            });
+        });
+    });
+
+    observer.observe(document.querySelector('.chat_dialog_content_inner'), {
+        childList: true
+    });
+
+    registered = true;
+}
+
+var logObserver = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
-        Array.prototype.forEach(mutation.addedNodes, function(node) {
-            node.scrollIntoView(false);
+        Array.prototype.forEach.call(mutation.addedNodes, function(node) {
+            if (node.className == 'chat_dialog') {
+                registerObserver();
+                logObserver.disconnect();
+            }
         });
     });
 });
 
-observer.observe(document.querySelector('.chat_dialog_content_inner'), {
+logObserver.observe(document.querySelector('#chatlog'), {
     childList: true
 });
