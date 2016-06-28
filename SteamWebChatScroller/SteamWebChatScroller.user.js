@@ -5,43 +5,26 @@
 // @downloadURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.user.js
 // @updateURL https://github.com/Sharparam/UserScripts/raw/master/SteamWebChatScroller/SteamWebChatScroller.meta.js
 // @include https://steamcommunity.com/chat/*
-// @version 1.0.1
+// @version 1.0.2
 // @grant none
 // @run-at document-end
 // ==/UserScript==
 
-var registered = false;
-
-function registerObserver() {
-    if (registered)
-        return;
-
-    var observer = new MutationObserver(function (mutations) {
-        mutations.forEach(function (mutation) {
-            Array.prototype.forEach.call(mutation.addedNodes, function(node) {
-                node.scrollIntoView(true);
-            });
-        });
-    });
-
-    observer.observe(document.querySelector('.chat_dialog_content_inner'), {
-        childList: true
-    });
-
-    registered = true;
-}
-
-var logObserver = new MutationObserver(function (mutations) {
+var observer = new MutationObserver(function (mutations) {
     mutations.forEach(function (mutation) {
         Array.prototype.forEach.call(mutation.addedNodes, function(node) {
             if (node.className == 'chat_dialog') {
-                registerObserver();
-                logObserver.disconnect();
+                observer.disconnect();
+                observer.observe(node.querySelector('.chat_dialog_content_inner'), {
+                    childList: true
+                });
+            } else if (node.classList.contains('chat_message')) {
+                node.scrollIntoView(true);
             }
         });
     });
 });
 
-logObserver.observe(document.querySelector('#chatlog'), {
+observer.observe(document.querySelector('#chatlog'), {
     childList: true
 });
