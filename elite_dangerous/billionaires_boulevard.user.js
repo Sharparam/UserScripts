@@ -54,7 +54,6 @@ const init = () => {
   const systemCurrentSpan = document.createElement('span');
   const systemTotalSpan = document.createElement('span');
   const systemRows = $$('tbody > tr', tbl);
-  const systemTotalCount = systemRows.length;
   systemTotalSpan.classList.add('system-total');
   systemCurrentSpan.classList.add('system-current');
   systemCounterSpan.append(systemCurrentSpan);
